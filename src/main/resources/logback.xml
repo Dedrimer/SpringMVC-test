@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!--参数可以配置在配置文件中,这里要在最上面引入配置文件,使用${key}获取值 -->
+    <property resource="application.properties"/>
+    <property name="log.root.level" value="${log.root.level}" /> <!-- 日志级别 -->
+    <property name="log.base" value="/opt/logs/education-government" /> <!-- 日志路径 -->
+    <property name="log.moduleName" value="log" />  <!-- 模块名称， 影响日志配置名，日志文件名 -->
+    <property name="log.max.size" value="20MB" /> <!-- 日志文件大小 也可以不设置大小,只按照时间来滚动记录  -->
+
+    <!--控制台输出 -->
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread]%logger{56}.%method\(\):%L -%msg%n</Pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${log.root.level}</level>
+        </filter>
+    </appender>
+
+    <!--myibatis log configure-->
+    <logger name="com.apache.ibatis" level="TRACE"/>
+    <logger name="java.sql.Connection" level="DEBUG"/>
+    <logger name="java.sql.Statement" level="DEBUG"/>
+    <logger name="java.sql.PreparedStatement" level="DEBUG"/>
+
+    <!-- 用来设置某一个包或者具体的某一个类的日志打印级别,addtivity代表是否向上级root传递打印信息。默认是true-->
+    <logger name="com.zjtec" >
+        <level value="${log.root.level}" />
+        <!-- 标识这个appender将会添加到这个logger -->
+        <appender-ref ref="stdout" />
+    </logger>
+    <logger name="org.springframework" additivity="false">
+        <level value="${log.root.level}"/>
+        <!-- 标识这个appender将会添加到这个logger -->
+        <appender-ref ref="stdout" />
+    </logger>
+    <!-- root 只有一个level属性-->
+    <root level="${log.root.level}">
+        <!-- 标识这个appender将会添加到这个root -->
+        <appender-ref ref="stdout" />
+    </root>
+</configuration>

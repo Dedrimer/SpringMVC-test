@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.zjtec.travel.dao.UserDao">
+	<select id="findByUserName" parameterType="string"
+			resultType="com.zjtec.travel.domain.User">
+		<!-- TODO:完成SQL -->
+	</select>
+	<select id="findActiveUserByUserName" parameterType="string"
+			resultType="com.zjtec.travel.domain.User">
+		<!-- TODO:完成SQL -->
+	</select>
+	<insert id="save" parameterType="com.zjtec.travel.domain.User">
+		<!-- TODO:完成SQL -->
+	</insert>
+	<select id="existUserNameOrEmail" parameterType="string" resultType="boolean">
+		<!-- TODO:完成SQL -->
+	</select>
+	<update id="activeUser" parameterType="string">
+		<!-- TODO:完成SQL -->
+	</update>
+</mapper>

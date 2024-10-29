@@ -1,0 +1,79 @@
+<!-- 头部 start -->
+    <header id="header">
+        <div class="top_banner">
+            <img src="images/top_banner.jpg" alt="">
+        </div>
+        <div class="shortcut">
+            <!-- 未登录状态  -->
+            <div class="login_out" id="noauth_info">
+                <a href="login.html">登录</a>
+                <a href="register.html">注册</a>
+            </div>
+            <!-- 登录状态  -->
+            <div class="login" id="member_info">
+                <p>欢迎回来，<span id="userProfilePanel"></span>
+                <a href="myfavorite.html" class="collection">我的收藏</a>
+                <a href="logout" class="collection">退出</a></p>
+            </div>
+        </div>
+        <div class="header_wrap">
+            <div class="topbar">
+                <div class="logo">
+                    <a href="/"><img src="images/logo.jpg" alt=""></a>
+                </div>
+                <div class="search">
+                    <input name="" type="text" placeholder="请输入路线名称" class="search_input" autocomplete="off">
+                    <a href="javascript:;" class="search-button">搜索</a>
+                </div>
+                <div class="hottel">
+                    <div class="hot_pic">
+                        <img src="images/hot_tel.jpg" alt="">
+                    </div>
+                    <div class="hot_tel">
+                        <p class="hot_time">客服热线(9:00-6:00)</p>
+                        <p class="hot_num">400-618-9090</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- 头部 end -->
+     <!-- 首页导航 -->
+    <div class="navitem">
+        <ul class="nav" id="category">
+
+        </ul>
+    </div>
+<script>
+function findGetParameter(parameterName) {
+        var result = null,
+            tmp = [];
+        var items = location.search.substr(1).split("&");
+        for (var index = 0; index < items.length; index++) {
+            tmp = items[index].split("=");
+            if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+        }
+        return result;
+    }
+    // 入口函数
+    $(function () {
+        //查询分类数据
+        $.get("category/findAll",{},function (data) {
+            //返回json数据格式： [{cid:1,cname:国内游},{}]
+            let lis = '<li><a href="index.html">首页</a></li>';
+            //遍历数组，拼接字符串(<li>)
+            var cid=findGetParameter("cid");
+            for (let i = 0;i < data.length;i++){
+                var cls=(data[i].cid+'')==cid?'nav-active':'';
+                let li = '<li class="'+cls+'"><a href="route_list.html?cid=' + data[i].cid + '">' + data[i].cname + '</a></li>';
+                lis += li;
+            }
+            //拼接收藏排行榜的li
+            lis += '<li><a href="favoriterank.html">收藏排行榜</a></li>';
+            //将lis字符串，设置到ul的html内容中
+            $("#category").html(lis);
+        });
+
+    });
+</script>
+    
