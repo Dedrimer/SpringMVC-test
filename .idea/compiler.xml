@@ -8,7 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="travel-dev" />
-        <module name="travel-stu" />
+        <module name="zjtec_travel" />
       </profile>
     </annotationProcessing>
   </component>
