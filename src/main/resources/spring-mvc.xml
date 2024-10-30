@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans
-        xmlns="http://www.springframework.org/schema/beans"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:context="http://www.springframework.org/schema/context"
-        xmlns:mvc="http://www.springframework.org/schema/mvc"
-        xmlns:util="http://www.springframework.org/schema/util"
-        xsi:schemaLocation="
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
-		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
-        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
-    <!--配置注解扫描-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-3.2.xsd
+                           http://www.springframework.org/schema/mvc
+                           http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+    <!-- 配置注解扫描 -->
     <context:component-scan base-package="com.zjtec.travel.controller,com.zjtec.travel.service.impl"/>
+
     <!-- SpringMVC注解支持 -->
     <mvc:annotation-driven/>
 
@@ -23,7 +27,7 @@
     <mvc:resources mapping="/img/**" location="/img/"/>
     <mvc:resources mapping="/js/**" location="/js/"/>
 
-    <!--拦截器-->
+    <!-- 拦截器 -->
     <mvc:interceptors>
         <mvc:interceptor>
             <!-- 配置拦截器作用的路径 -->
@@ -45,33 +49,32 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
-    <!-- ThymeLeaf 视图 start -->
+    <!-- Thymeleaf 配置 -->
     <bean id="templateResolver"
           class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
         <property name="prefix" value="/WEB-INF/templates/"/>
         <property name="suffix" value=".html"/>
         <property name="characterEncoding" value="UTF-8"/>
-        <property name="order" value="1"/>
         <property name="templateMode" value="HTML5"/>
         <property name="cacheable" value="false"/>
-    </bean>
-
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/"/>
-        <property name="suffix" value=".html"/>
     </bean>
 
     <bean id="templateEngine"
           class="org.thymeleaf.spring5.SpringTemplateEngine">
         <property name="templateResolver" ref="templateResolver"/>
+        <property name="enableSpringELCompiler" value="true" />
     </bean>
 
     <bean id="viewResolver" class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
         <property name="templateEngine" ref="templateEngine"/>
         <property name="characterEncoding" value="UTF-8"/>
+        <property name="contentType" value="text/html; charset=UTF-8"/>
+        <property name="order" value="1" />
     </bean>
-    <!-- ThymeLeaf 视图 end -->
+
+    <!-- 数据库配置 -->
     <util:properties id="druid" location="classpath:druid.properties"/>
+
     <bean id="druidDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
         <!-- 基本属性 url、user、password -->
         <property name="driverClassName" value="#{druid.driverClassName}"/>
@@ -84,22 +87,14 @@
     </bean>
 
     <!-- 配置SqlSessionFactoryBean -->
-    <!-- 可以定义一些属性来指定Mybatis框架的配置信息 -->
     <bean id="ssf" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <!-- 数据源，注入连接信息 -->
         <property name="dataSource" ref="druidDataSource"/>
-        <!-- 用于指定sql定义文件的位置(加classpath从src下找) -->
-        <property name="mapperLocations"
-                  value="classpath:com/zjtec/travel/mapper/*.xml"/>
+        <property name="mapperLocations" value="classpath:com/zjtec/travel/mapper/*.xml"/>
     </bean>
 
     <!-- 配置MapperScannerConfigurer -->
-    <!-- 按指定包扫描接口，批量生成接口实现对象，id为接口名首字母小写 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <!-- 指定扫描 mobileshop.dao包下所有接口 -->
-        <property name="basePackage"
-                  value="com.zjtec.travel.dao"/>
-        <!-- 注入sqlSessionFactory（此句可不写，自动注入sqlSessionFactory） -->
+        <property name="basePackage" value="com.zjtec.travel.dao"/>
         <property name="sqlSessionFactory" ref="ssf"/>
     </bean>
 </beans>

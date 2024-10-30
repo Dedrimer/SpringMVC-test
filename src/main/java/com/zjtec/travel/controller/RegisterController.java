@@ -27,11 +27,16 @@ public class RegisterController {
 
   private static final Logger logger = LoggerFactory.getLogger(RegisterController.class);
 
-  @RequestMapping("/signup")
-  public String showRegisterPage() {
-    return "register";
-  }
-
+//  @RequestMapping("/signup")
+//  public String showRegisterPage() {
+//    return "register";
+//  }
+//
+//  @RequestMapping("/activation")
+//  public String showActivatePage() {
+//    return "WEB-INF/templates/msg";
+//  }
+//
   @Autowired
   private UserService userService;
 
@@ -83,10 +88,34 @@ public class RegisterController {
     return resmsg;
   }
 
-  @RequestMapping(value = "/activation")
-  public String activation(ModelMap map, String username, String code){
-    //TODO:完成激活功能
-    map.put("title","用户激活");
-    return "msg";
+  @RequestMapping(value = "/activation", method = RequestMethod.GET)
+  public String activation(ModelMap map, String username, String code) {
+    if (username != null && code != null) {
+      User user = userDao.findByUserName(username);
+      if (user != null) {
+        // 打印用户状态信息
+        System.out.println("User Status: " + user.getStatus());
+        if ("N".equals(user.getStatus()) && code.equals(user.getCode())) {
+          if (userDao.activeUser(username, code)) {
+            map.put("msg", "激活成功，请点击跳转链接登录");
+            map.put("redirect", "/login.html");
+          } else {
+            map.put("msg", "激活失败，点击跳转链接返回首页");
+            map.put("redirect", "/");
+          }
+        } else {
+          map.put("msg", "激活失败，点击跳转链接返回首页");
+          map.put("redirect", "/");
+        }
+      } else {
+        map.put("msg", "激活失败，点击跳转链接返回首页");
+        map.put("redirect", "/");
+      }
+    } else {
+      map.put("msg", "激活失败，点击跳转链接返回首页");
+      map.put("redirect", "/");
+    }
+    map.put("title", "用户激活");
+    return "msg";  // 返回 msg.html 页面
   }
 }
