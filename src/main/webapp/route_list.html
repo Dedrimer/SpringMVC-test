@@ -80,11 +80,15 @@
                     //拼接字符串
                     lis += li;
                 }
-                //TODO
-                let nextPage = '<li class="threeword"><a href="javascript:;">下一页</a></li>'; //下一页
-                let lastPage = '<li class="threeword"><a href="javascript:;">末页</a></li>';  //末页
+
+                //下一页与末页实现
+                let nextNum = pb.currentPage + 1;
+                if (nextNum > pb.totalPage) { nextNum = pb.totalPage; }
+                let nextPage = `<li onclick="javascript:load(${cid}, ${nextNum})" class="threeword"><a href="javascript:void(0)">下一页</a></li>`;
+                let lastPage = `<li onclick="javascript:load(${cid}, ${pb.totalPage})" class="threeword"><a href="javascript:void(0)">末页</a></li>`;
                 lis += nextPage;
                 lis += lastPage;
+
                 //将lis内容设置到ul
                 $("#pageNum").html(lis);
 
@@ -93,8 +97,25 @@
                 for (let i = 0;i < pb.list.length;i++){
                     //list数据格式:{rid:1,rname:"xxx"}
                     let route = pb.list[i];
-                    //TODO:完成填入旅游产品信息功能
-                    let li = '';
+                    //完成填入旅游产品信息功能
+                    let li = `
+                        <li>
+                            <div class="img"><img src="${route.rimage}" alt="${route.rname}" style="width: 299px; height: 169px;"></div>
+                            <div class="text1">
+                                <p>${route.rname}</p>
+                                <br/>
+                                <p>${route.routeIntroduce}</p>
+                            </div>
+                            <div class="price">
+                                <p class="price_num">
+                                    <span>&yen;</span>
+                                    <span>${route.price}</span>
+                                    <span>起</span>
+                                </p>
+                                <p><a href="route_detail.html?rid=${route.rid}">查看详情</a></p>
+                            </div>
+                        </li>
+            `;
                     //字符拼接
                     route_lis += li;
                 }

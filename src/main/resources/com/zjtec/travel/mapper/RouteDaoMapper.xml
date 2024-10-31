@@ -2,12 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
 <mapper namespace="com.zjtec.travel.dao.RouteDao">
-	<select id="findTotalCount" parameterType="int"
-			resultType="int">
-		<!-- TODO:完成SQL -->
+	<select id="findTotalCount" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM tab_route WHERE cid = #{cid}
 	</select>
-	<select id="findByPage" parameterType="int"
-			resultType="com.zjtec.travel.domain.Route">
-		<!-- TODO:完成SQL -->
+	<select id="findByPage" parameterType="int" resultType="com.zjtec.travel.domain.Route">
+		SELECT * FROM tab_route WHERE cid = #{cid} LIMIT #{start}, #{pageSize}
 	</select>
 </mapper>

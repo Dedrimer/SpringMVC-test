@@ -18,8 +18,15 @@ public class RouteController {
 
   @RequestMapping("/pageQuery")
   @ResponseBody
-  public PageBean<Route> pageQuery(@RequestParam("cid") Integer cid,@RequestParam(value="pageSize",required = false) Integer pageSize,@RequestParam(value="currentPage",required = false) Integer currentPage){
-    //TODO:完成pageQuery 功能
-    return null;
+  //在后端设置默认值以保证参数传递正确
+  public PageBean<Route> pageQuery(@RequestParam("cid") int cid,
+                                   @RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
+                                   @RequestParam(value = "pageSize", defaultValue = "5") int pageSize){
+    try {
+      return routeService.pageQuery(cid, currentPage, pageSize);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 }
