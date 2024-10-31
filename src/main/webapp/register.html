@@ -166,6 +166,21 @@
 				return flag;
 			}
 
+			// 校验手机号
+			function checkPhone() {
+				let phoneNumber = $("#telephone").val();
+				let reg_phoneNumber = /^\d{11}$/;
+				let flag = reg_phoneNumber.test(phoneNumber);
+				if (flag) {
+					$("#telephone").css("border", "");
+					hideMsg();
+				} else {
+					$("#telephone").css("border", "1px solid red");
+					showMsg("手机号码长度必须为11位");
+				}
+				return flag;
+			}
+
 			// 校验是否为空
 			function isNotBlankField(fieldId, msg) {
 				console.log("检查字段: " + fieldId);
@@ -209,7 +224,7 @@
 					var check = $("#check").val().trim();
 
 					// 当表单提交时，调用所有的校验方法
-					if (checkUsername() && checkPassword() && checkEmail() &&
+					if (checkUsername() && checkPassword() && checkEmail() && checkPhone() &&
 							isNotBlankField("name", "姓名不能为空") &&
 							isNotBlankField("birthday", "生日不能为空") &&
 							isNotBlankField("telephone", "手机号不能为空") &&
