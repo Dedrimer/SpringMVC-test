@@ -58,7 +58,7 @@ function findGetParameter(parameterName) {
     // 入口函数
     $(function () {
         //查询分类数据
-        $.get("category/findAll",{},function (data) {
+        $.get("http://localhost:8082/category/findAll",{},function (data) {
             //返回json数据格式： [{cid:1,cname:国内游},{}]
             let lis = '<li><a href="index.html">首页</a></li>';
             //遍历数组，拼接字符串(<li>)
@@ -76,4 +76,3 @@ function findGetParameter(parameterName) {
 
     });
 </script>
-    
