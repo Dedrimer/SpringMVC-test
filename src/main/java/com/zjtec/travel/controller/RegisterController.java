@@ -5,6 +5,7 @@ import com.zjtec.travel.constant.Const;
 import com.zjtec.travel.dao.UserDao;
 import com.zjtec.travel.domain.User;
 import com.zjtec.travel.service.UserService;
+import com.zjtec.travel.util.MsgDigestUtils;
 import com.zjtec.travel.vo.ResMsg;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -66,6 +67,12 @@ public class RegisterController {
         ue.setStatus(Const.USER_STATUS_INACTIVE);
         ue.setCode(RandomStringUtils.random(20, Const.CHARSET_ALPHA));
         ue.setRole(Const.USER_ROLE_MEMBER);
+
+        // 密码加密
+        String salt = MsgDigestUtils.generateSalt();
+        String encryptedPassword = MsgDigestUtils.encodeSHA256(ue.getPassword(), salt);
+        ue.setSalt(salt);
+        ue.setPassword(encryptedPassword);
 
         // 保存用户信息
         if (userDao.save(ue) > 0) {

@@ -11,8 +11,8 @@
 	</select>
 
 	<insert id="save" parameterType="com.zjtec.travel.domain.User">
-		INSERT INTO tab_user (username, password, email, name, telephone, birthday, sex, status, code, role)
-		VALUES (#{username}, #{password}, #{email}, #{name}, #{telephone}, #{birthday}, #{sex}, #{status}, #{code}, #{role})
+		INSERT INTO tab_user (username, password, email, name, telephone, birthday, sex, status, code, role, salt)
+		VALUES (#{username}, #{password}, #{email}, #{name}, #{telephone}, #{birthday}, #{sex}, #{status}, #{code}, #{role}, #{salt})
 	</insert>
 
 	<select id="existUserNameOrEmail" parameterType="map" resultType="boolean">

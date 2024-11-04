@@ -4,6 +4,7 @@ import com.zjtec.travel.constant.Const;
 import com.zjtec.travel.dao.UserDao;
 import com.zjtec.travel.domain.User;
 import com.zjtec.travel.service.UserService;
+import com.zjtec.travel.util.MsgDigestUtils;
 import com.zjtec.travel.vo.LoginVo;
 import com.zjtec.travel.vo.RedirectVo;
 import com.zjtec.travel.vo.ResMsg;
@@ -55,8 +56,7 @@ public class LoginController {
 
       // 校验用户是否存在
       if (dbuser != null && "Y".equals(dbuser.getStatus())) {
-        // 校验密码是否正确
-        if (vo.getPassword().equals(dbuser.getPassword())) {
+        if (userService.validUserPwd(vo.getUsername(), vo.getPassword())) {
           resMsg.setErrcode("0");
           resMsg.setErrmsg("登录成功");
 

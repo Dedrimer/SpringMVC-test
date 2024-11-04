@@ -154,6 +154,11 @@
       <artifactId>logback-ext-spring</artifactId>
       <version>0.1.5</version>
     </dependency>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.11</version>
+    </dependency>
   </dependencies>
   <!-- 日志模块 end-->
   <!--<build>

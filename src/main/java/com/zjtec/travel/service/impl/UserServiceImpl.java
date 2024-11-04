@@ -3,6 +3,7 @@ package com.zjtec.travel.service.impl;
 import com.zjtec.travel.dao.UserDao;
 import com.zjtec.travel.domain.User;
 import com.zjtec.travel.service.UserService;
+import com.zjtec.travel.util.MsgDigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +19,25 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    public boolean validUserPwd(String username,String password) {
-        //TODO:请完成此功能
-        return false;
+    public boolean validUserPwd(String username, String password) {
+        logger.info("Validating user password for username: {}", username);
+        User user = userDao.findByUserName(username);
+        if (user == null) {
+            //logger.warn("User not found: {}", username);
+            return false;
+        }
+        if (!"Y".equals(user.getStatus())) {
+            //logger.warn("User not active: {}", username);
+            return false;
+        }
+        //logger.info("User found: {}", user);
+        String salt = user.getSalt();
+        //logger.debug("User salt: {}", salt);
+        String encryptedPassword = MsgDigestUtils.encodeSHA256(password, salt);
+        //logger.debug("Encrypted password: {}", encryptedPassword);
+        boolean isPasswordValid = encryptedPassword.equals(user.getPassword());
+        //logger.info("Password valid: {}", isPasswordValid);
+        return isPasswordValid;
     }
 
     @Override
