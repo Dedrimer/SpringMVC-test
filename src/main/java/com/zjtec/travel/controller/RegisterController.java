@@ -4,6 +4,7 @@ import com.zjtec.travel.Application;
 import com.zjtec.travel.constant.Const;
 import com.zjtec.travel.dao.UserDao;
 import com.zjtec.travel.domain.User;
+import com.zjtec.travel.service.EmailService;
 import com.zjtec.travel.service.UserService;
 import com.zjtec.travel.util.MsgDigestUtils;
 import com.zjtec.travel.vo.ResMsg;
@@ -47,6 +48,8 @@ public class RegisterController {
   @Autowired
   private UserDao userDao;
 
+  @Autowired private EmailService emailService;
+
   @RequestMapping(value = "/signup", method = RequestMethod.POST) @ResponseBody
   public ResMsg signup(@RequestBody User ue) {
     ResMsg resmsg = new ResMsg();
@@ -78,7 +81,10 @@ public class RegisterController {
         if (userDao.save(ue) > 0) {
           resmsg.setErrcode("0");
           resmsg.setErrmsg("注册成功");
-          logger.info("激活链接 -> http://localhost:8082/activation?username=" + ue.getUsername() + "&code=" + ue.getCode());
+          String activationLink = "http://localhost:8082/activation?username=" + ue.getUsername() + "&code=" + ue.getCode();
+          String emailContent = "请点击以下链接激活您的账号：" + activationLink;
+          emailService.sendEmail(ue.getEmail(), "激活您的账号", emailContent);
+          logger.info(activationLink);
         } else {
           resmsg.setErrcode("1");
           resmsg.setErrmsg("注册失败");
