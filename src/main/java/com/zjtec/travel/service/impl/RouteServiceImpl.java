@@ -40,4 +40,10 @@ public class RouteServiceImpl implements RouteService {
 
         return pb;
     }
+
+    @Override
+    public Route getRouteDetails(int rid) {
+        logger.info("返回的数据: {}", routeDao.findByRid(rid));
+        return routeDao.findByRid(rid);
+    }
 }

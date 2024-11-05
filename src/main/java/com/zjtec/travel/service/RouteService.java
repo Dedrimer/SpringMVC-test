@@ -12,4 +12,6 @@ public interface RouteService {
      * @return
      */
     PageBean<Route> pageQuery(int cid,int currentPage,int pageSize);
+
+    Route getRouteDetails(int rid);
 }

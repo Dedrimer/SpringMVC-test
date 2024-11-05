@@ -8,4 +8,26 @@
 	<select id="findByPage" parameterType="int" resultType="com.zjtec.travel.domain.Route">
 		SELECT * FROM tab_route WHERE cid = #{cid} LIMIT #{start}, #{pageSize}
 	</select>
+	<select id="findByRid" parameterType="int" resultType="com.zjtec.travel.domain.Route">
+		SELECT r.rid, r.rname, r.price, r.routeIntroduce,
+		r.cid, r.rimage, r.sid, s.sname, s.consphone,
+		s.address FROM tab_route r JOIN tab_seller s ON r.sid = s.sid WHERE r.rid = #{rid}
+	</select>
+
+	<resultMap id="RouteResultMap" type="com.zjtec.travel.domain.Route">
+		<id property="rid" column="rid"/>
+		<result property="rname" column="rname"/>
+		<result property="price" column="price"/>
+		<result property="routeIntroduce" column="routeIntroduce"/>
+		<result property="cid" column="cid"/>
+		<result property="rimage" column="rimage"/>
+		<result property="sid" column="sid"/>
+		<association property="seller" javaType="com.zjtec.travel.domain.Seller">
+			<id property="sid" column="sid"/>
+			<result property="sname" column="seller_sname"/>
+			<result property="consphone" column="seller_consphone"/>
+			<result property="address" column="seller_address"/>
+		</association>
+	</resultMap>
+
 </mapper>
