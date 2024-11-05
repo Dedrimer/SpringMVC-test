@@ -1,7 +1,6 @@
 package com.zjtec.travel.interceptor;
 
 import com.zjtec.travel.constant.Const;
-import com.zjtec.travel.vo.ResMsg;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,35 +16,44 @@ import java.util.regex.Pattern;
 public class AuthInterceptor implements HandlerInterceptor {
   private Set<String> noAuthURISet;
   private List<Pattern> noAuthURIPatternList;
+  private static final Pattern ROUTE_PATTERN = Pattern.compile("/route/\\d+");
+
   @Override
   public boolean preHandle(HttpServletRequest request,
                            HttpServletResponse response, Object handler) throws Exception {
-    boolean result=false;
+    boolean result = false;
     // 获取请求的URL
     String url = request.getRequestURI();
+
+    // 检查是否匹配 /route/任意数字 的路径
+    if (ROUTE_PATTERN.matcher(url).matches()) {
+      return true;
+    }
+
     // login.jsp或登录请求放行，不拦截
-    Matcher m=null;
-    for(Pattern p:noAuthURIPatternList) {
-      m=p.matcher(url);
+    Matcher m = null;
+    for (Pattern p : noAuthURIPatternList) {
+      m = p.matcher(url);
       if (m.matches()) {
-        result= true;
+        result = true;
         break;
       }
     }
-    if(!result) {
+
+    if (!result) {
       // 获取 session
       HttpSession session = request.getSession();
       Object obj = session.getAttribute(Const.SESSION_KEY_USER);
       if (obj != null) {
         result = true;
-      }else{
-        if(Const.CONTENT_TYPE_JSON.equals(request.getContentType())){
-          response.setContentType(Const.CONTENT_TYPE_JSON+";charset=utf-8");
+      } else {
+        if (Const.CONTENT_TYPE_JSON.equals(request.getContentType())) {
+          response.setContentType(Const.CONTENT_TYPE_JSON + ";charset=utf-8");
           response.setCharacterEncoding("utf-8");
           response.setContentType("application/json; charset=utf-8");
           PrintWriter writer = response.getWriter();
           writer.write("{\"errcode\":403,\"errmsg\":\"No Authentication\"}");
-        }else{
+        } else {
           request.getRequestDispatcher("/403.html").forward(request,
                   response);
         }
@@ -56,9 +64,9 @@ public class AuthInterceptor implements HandlerInterceptor {
 
   public void setNoAuthURISet(Set<String> noAuthURISet) {
     this.noAuthURISet = noAuthURISet;
-    if(noAuthURISet!=null && noAuthURISet.size()>0){
-      noAuthURIPatternList=new LinkedList<>();
-      for(String regex:noAuthURISet){
+    if (noAuthURISet != null && noAuthURISet.size() > 0) {
+      noAuthURIPatternList = new LinkedList<>();
+      for (String regex : noAuthURISet) {
         noAuthURIPatternList.add(Pattern.compile(regex));
       }
     }
