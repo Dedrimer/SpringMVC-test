@@ -4,6 +4,7 @@ import com.zjtec.travel.service.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
@@ -12,11 +13,12 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 @Service
+@PropertySource("email.properties")
 public class EmailServiceImpl implements EmailService {
 
     private final static Logger log= LoggerFactory.getLogger(EmailServiceImpl.class);
 
-    //注意此处使用了暴力定义，导入错误问题仍未解决，待验证
+    //通过propertySource导入定义的值
     @Value("${email.smtphost:smtp.sina.cn}")
     private String smtpHost;//SMTP 地址，例如smtp.139.com
 
